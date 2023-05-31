@@ -36,6 +36,7 @@ exports.produtoPorId = async (id) => {
 
 exports.procuraProduto = async (query) => {
   try {
+    console.log(query);
     const queryRegx = new RegExp(query, "i");
     const produto = await Produto.find({
       $or: [
