@@ -13,7 +13,7 @@ const Userschema = new mongoose.Schema(
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
     },
     password: { type: String, required: true, select: false}, 
-    status: { type: Boolean },
+    status: { type: Boolean, require: false},
   },
   {
     locale: { String },

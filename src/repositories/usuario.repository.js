@@ -1,5 +1,5 @@
 const Usuario = require("../model/usuario");
-const { validate } = require("../services/validate");
+
 
 exports.criaUsuario = async (usuario) => {
   try {
@@ -27,38 +27,6 @@ exports.atualizaUsuario = async (usuario, id) => {
     return usuarioAtualizado;
   } catch (error) {
     throw new Error(error);
-  }
-};
-
-exports.usuarioValidacao = async (email, password) => {
-  try {
-    await Usuario.findOne({ email: email })
-      .select("+password")
-      .exec()
-      .then((user) => {
-        if (validate(password, user?.password)) {
-          return user;
-        }
-        return false;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  } catch (error) {
-    throw error;
-  }
-};
-
-exports.registraUsuario = async (user) => {
-  try {
-    const usr = await Usuario.findOne({ email: user.email }).exec();
-    if (usr) {
-      throw new Error("Usuário já cadastrado!");
-    }
-    const novoUser = await Usuario.create(user);
-    return novoUser;
-  } catch (error) {
-    throw error;
   }
 };
 

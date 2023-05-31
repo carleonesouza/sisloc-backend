@@ -1,6 +1,7 @@
 const commonRepository = require("../repositories/common.repository");
-const usuarioRepository = require("../repositories/usuario.repository");
+const Usuario = require("../model/usuario");
 const { generateToken } = require("../services/auth");
+const { validate } = require("../services/validate");
 
 exports.listaDeProdutos = async (req, res) => {
   try {
@@ -49,22 +50,21 @@ exports.procuraProdutos = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    await usuarioRepository
-      .usuarioValidacao(req.body.email, req.body.password)
-      .then((user) => {
-        if (user) {
+    await Usuario.findOne({ email: req.body.email })
+      .select("+password")
+      .exec()
+      .then((user) => {         
+        if ( validate(req.body.password, user.password) ) {       
           const token = generateToken(user.email, user._id);
-          res.status(200).send({
+          return res.status(200).send({
             accessToken: token,
             user: { name: user.nome, email: user.email, _id: user._id },
           });
-        } else {
-          throw new Error("Email or password invalid!");
-        }
+        } 
       })
       .catch((err) => {
         res.status(401).send({ message: "Unauthorized! " + err.message });
-      });
+      }).finally();
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    await usuarioRepository
+    await commonRepository
       .registraUsuario(req.body)
       .then((user) => {
         if (user) {

@@ -4,8 +4,8 @@ const commonController = require('../controllers/common.controller');
 
 
 //Rotas acesso
-router.post('/user/login', commonController.login)
-router.post('/user/register', commonController.register)
+router.post('/users/login', commonController.login)
+router.post('/users/register', commonController.register)
 
 
 //Rotas publicas produtos

@@ -1,4 +1,6 @@
 const Produto = require("../model/produto");
+const Usuario = require("../model/usuario");
+
 
 exports.listaProdutos = async () => {
   try {
@@ -36,7 +38,6 @@ exports.produtoPorId = async (id) => {
 
 exports.procuraProduto = async (query) => {
   try {
-    console.log(query);
     const queryRegx = new RegExp(query, "i");
     const produto = await Produto.find({
       $or: [
@@ -47,5 +48,18 @@ exports.procuraProduto = async (query) => {
     return produto;
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+exports.registraUsuario = async (user) => {
+  try {
+    const usr = await Usuario.findOne({ email: user.email }).exec();
+    if (usr) {
+      throw new Error("Usuário já cadastrado!");
+    }
+    const novoUser = await Usuario.create(user);
+    return novoUser;
+  } catch (error) {
+    throw error;
   }
 };
