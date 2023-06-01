@@ -8,6 +8,9 @@ const itemController = require('../controllers/item.controller');
 
 //Produtos
 router.post('/produtos/add',produtoController.addProduto);
+router.get('/produtos/search/:terms', produtoController.procuraProdutos);
+router.get('/produtos', produtoController.listaDeProdutos);
+router.get('/produtos/:id', produtoController.produtoPorId);
 router.put('/produtos/:id', produtoController.atualizaProduto);
 router.delete('/products/:id', produtoController.deletaProduto);
 

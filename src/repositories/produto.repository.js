@@ -31,7 +31,59 @@ exports.atualizaProduto = async (produto, id) => {
     throw new Error(error)
   }
 };
+exports.listaProdutos = async () => {
+  try {
+    const popObj = {
+      path: "modalidades",
+      populate: {
+        path: "itens",
+      },
+    };
+    const lista = await Produto.find({}).populate(popObj).exec();
+    return lista;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
+exports.produtoPorId = async (id) => {
+  try {
+    const popObj = {
+      path: "modalidades",
+      populate: {
+        path: "itens",
+      },
+    };
+    const query = Produto.where({ _id: id });
+    const produto = await query
+      .findOne()
+      .populate(popObj)
+      .exec();
+    return produto;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.procuraProduto = async (query) => {
+  try {
+
+    const value = query.terms.toUpperCase().charAt(0);
+  
+    const produto = await Produto.find({
+     $or:[
+        {
+          "nome":{ $regex:value},
+        }
+     ]
+    }).
+    limit(10).
+    exec();
+    return produto;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 exports.deletaProduto = async (id) => {
     try {
